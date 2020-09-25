@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="showTitle" type="id" />
+    <item name="appbar_title" type="id" />
 </resources>

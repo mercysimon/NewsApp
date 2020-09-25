@@ -2,20 +2,19 @@ package com.example.mynews;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +27,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity  {
 
     public static final String API_KEY="6df9e29a31004b0ea2c67b139f61d29c";
     private RecyclerView recyclerView;
@@ -36,17 +35,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private List<Article> articles=new ArrayList<>();
     private Adapter adapter;
     private String TAG=MainActivity.class.getSimpleName();
-    private TextView topHeadline;
-    private SwipeRefreshLayout swipeRefreshLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        swipeRefreshLayout=findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
 
         recyclerView=findViewById(R.id.recyclerView);
         layoutManager=new LinearLayoutManager(MainActivity.this);
@@ -54,12 +50,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setNestedScrollingEnabled(false);
 
-        onLoadingSwipeRefresh("");
+        loadJson("");
 
     }
     public void loadJson(final String keyword) {
-        topHeadline.setVisibility(View.VISIBLE);
-        swipeRefreshLayout.setRefreshing(true);
+
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
         String country = Utils.getCountry();
@@ -87,22 +82,40 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
-                    topHeadline.setVisibility(View.VISIBLE);
-                    swipeRefreshLayout.setRefreshing(false);
+                    initListener();
+
+
 
                 }else{
-                    topHeadline.setVisibility(View.INVISIBLE);
-                    swipeRefreshLayout.setRefreshing(false);
+
                     Toast.makeText(MainActivity.this, "No Result!", Toast.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<News> call, Throwable t) {
-                topHeadline.setVisibility(View.INVISIBLE);
-                swipeRefreshLayout.setRefreshing(false);
+            public void onFailure(Call<News> call, Throwable t){
 
+            }
+
+        });
+    }
+
+    private void initListener(){
+        adapter.setOnItemClickListener(new Adapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent=new Intent(MainActivity.this, NewsDetailActivity.class);
+
+                Article article = articles.get(position);
+                intent.putExtra("url", article.getUrl());
+                intent.putExtra("title",article.getTitle());
+                intent.putExtra("img",article.getUrlToImage());
+                intent.putExtra("date",article.getPublishedAt());
+                intent.putExtra("source",article.getSource().getName());
+                intent.putExtra("author",article.getAuthor());
+
+                startActivity(intent);
             }
         });
     }
@@ -121,14 +134,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public boolean onQueryTextSubmit(String query) {
                 if (query.length()>2){
-                    onLoadingSwipeRefresh(query);
+                    loadJson(query);
                 }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
+                loadJson(newText);
                 return false;
             }
         });
@@ -137,14 +150,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         return true;
     }
 
-    @Override
-    public void onRefresh() {
-        loadJson("");
-    }
-    private void onLoadingSwipeRefresh(final String keyword){
-        swipeRefreshLayout.post(
-                loadJson("")}
-                )
+
 }
 
 

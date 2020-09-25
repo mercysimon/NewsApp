@@ -13,9 +13,11 @@
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
         app:cardElevation="@dimen/cardview_default_elevation"
-        app:cardCornerRadius="10dp">
+        app:cardCornerRadius="10dp"
+        tools:ignore="PrivateResource">
         
         <RelativeLayout
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -50,13 +52,14 @@
                 android:textColor="@android:color/white"
                 android:singleLine="true"
                 android:layout_marginRight="160dp"
-                android:text="Author"
+                android:text="@string/author"
                 android:gravity="bottom"
                 android:layout_alignLeft="@+id/title"
                 android:layout_alignStart="@+id/title"
                 android:layout_alignRight="@+id/layoutDate"
                 android:layout_alignTop="@+id/layoutDate"
-                android:layout_alignEnd="@+id/layoutDate">
+                android:layout_alignEnd="@+id/layoutDate"
+                android:layout_marginEnd="160dp">
             </TextView>
             <FrameLayout
                 android:id="@+id/layoutDate"
@@ -67,7 +70,9 @@
                 android:padding="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="50dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp">
                 <ImageView
                     android:src="@drawable/ic_date"
                     android:layout_width="18dp"
@@ -80,9 +85,11 @@
                     android:id="@+id/publishedAt"
                     android:layout_marginLeft="27dp"
                     android:layout_marginRight="10dp"
-                    android:text="01 September 2020"
+                    android:text="@string/_01_september_2020"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="27dp"
+                    android:layout_marginEnd="10dp">
                 </TextView>
             </FrameLayout>
             <TextView
@@ -93,7 +100,7 @@
                 android:textColor="@color/colorTextTitle"
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
-                android:text="Title"
+                android:text="@string/title"
                 android:textSize="17sp"
                 android:layout_marginTop="10dp"
                 android:layout_below="@+id/img"
@@ -107,7 +114,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="5dp"
-                android:text="Desc">
+                android:text="@string/desc">
             </TextView>
             <TextView
                 android:id="@+id/source"
@@ -124,7 +131,8 @@
                 android:drawablePadding="10dp"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:text="Source">
+                android:text="Source"
+                android:layout_marginStart="16dp">
             </TextView>
             <TextView
                 android:id="@+id/time"
